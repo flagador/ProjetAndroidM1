@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="event_type_array">
-        <item>Examen</item>
-        <item>Oral</item>
-        <item>TP noté</item>
-    </string-array>
-</resources>
