@@ -56,4 +56,9 @@ public class Event implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String toString(){
+        return String.format("Event: %s, Date: %s, Time: %s, Coefficient: %d, Type: %s",
+                this.getTitle(), this.getDate(), this.getTime(), this.getCoefficient(), this.getType());
+    }
 }

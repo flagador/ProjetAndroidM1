@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,17 +52,24 @@ public class AddEventActivity extends AppCompatActivity {
                 String title = titleEditText.getText().toString();
                 String dateString = dateEditText.getText().toString();
                 String timeString = timeEditText.getText().toString();
-                int coefficient = Integer.parseInt(coeffEditText.getText().toString());
+                int coefficient = 0;
+                if(!coeffEditText.getText().toString().equals("")) {
+                    coefficient = Integer.parseInt(coeffEditText.getText().toString());
+                }
                 String type = typeSpinner.getSelectedItem().toString();
 
-                Event event = new Event(title, dateString, timeString, coefficient, type);
-                //saveEvent(event);
+                if(title.equals("") || dateString.equals("") || timeString.equals("") || coefficient==0){
+                    Toast.makeText(getApplicationContext(),"Missing value :(", Toast.LENGTH_LONG).show();
+                } else {
+                    Event event = new Event(title, dateString, timeString, coefficient, type);
+                    //saveEvent(event);
 
-                // Pass the event back to MainActivity
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("event", event);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                    // Pass the event back to MainActivity
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("event", event);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
             }
         });
     }

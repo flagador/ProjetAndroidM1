@@ -8,19 +8,30 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_EVENT_REQUEST_CODE = 1;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    Gson gson;
+    String eventsJson;
+    Type typeOfEvents;
+    List<Event> events;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+
+        sharedPreferences = getSharedPreferences("events", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        gson = new Gson();
+        eventsJson = sharedPreferences.getString("eventsList", null);
+        typeOfEvents = new TypeToken<List<Event>>(){}.getType();
+        events = gson.fromJson(eventsJson, typeOfEvents);
+        if (events == null) {
+            events = new ArrayList<>();
+        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +109,15 @@ public class MainActivity extends AppCompatActivity {
             String eventToast = String.format("Event: %s, Date: %s, Time: %s, Coefficient: %d, Type: %s",
                     event.getTitle(), event.getDate(), event.getTime(), event.getCoefficient(), event.getType());
             Toast.makeText(this, eventToast, Toast.LENGTH_LONG).show();
+
+            String json = this.gson.toJson(event);
+
+            events.add(event);
+            String newEventsJson = gson.toJson(events);
+            editor.putString("eventsList", newEventsJson);
+            editor.apply();
+            Log.v("events",events.toString());
         }
+
     }
 }
