@@ -4,10 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DailyFragment">
-    <TextView
-        android:id="@+id/dailyTextView"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Display events in a daily view" />
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/sortSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="end" />
+
+        <ListView
+            android:id="@+id/eventsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 </FrameLayout>
 

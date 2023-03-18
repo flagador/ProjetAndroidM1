@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     String eventsJson;
     Type typeOfEvents;
     List<Event> events;
+    MonthlyFragment monthlyFragment;
+    WeeklyFragment weeklyFragment;
+    DailyFragment dailyFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager viewPager = findViewById(R.id.viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        monthlyFragment = new MonthlyFragment();
+        weeklyFragment = new WeeklyFragment();
+        dailyFragment = new DailyFragment();
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -53,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         if (events == null) {
             events = new ArrayList<>();
         }
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,13 +67,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(addEventIntent, ADD_EVENT_REQUEST_CODE);
             }
         });
+
+        //update the events list when the page is selected so the events are displayed on creation
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                //UPDATE LES FRAGMENTS AU LANCEMENT
+                dailyFragment.updateEvents(events);
+
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MonthlyFragment(), "Monthly");
-        adapter.addFragment(new WeeklyFragment(), "Weekly");
-        adapter.addFragment(new DailyFragment(), "Daily");
+        adapter.addFragment(monthlyFragment, "Monthly");
+        adapter.addFragment(weeklyFragment, "Weekly");
+        adapter.addFragment(dailyFragment, "Daily");
         viewPager.setAdapter(adapter);
     }
 
@@ -116,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
             String newEventsJson = gson.toJson(events);
             editor.putString("eventsList", newEventsJson);
             editor.apply();
+            //UPDATE LES EVENTS DANS LES FRAGMENTS
+            dailyFragment.updateEvents(events);
             Log.v("events",events.toString());
         }
 

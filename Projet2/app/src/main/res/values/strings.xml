@@ -5,4 +5,9 @@
     <string name="event_time">Time</string>
     <string name="event_coefficient">Coefficient</string>
     <string name="add_event">Add Event</string>
+    <string-array name="sort_options">
+        <item>Sort by date</item>
+        <item>Sort by coefficient</item>
+        <item>Sort by type</item>
+    </string-array>
 </resources>
