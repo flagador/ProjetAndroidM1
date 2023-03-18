@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private static final int ADD_EVENT_REQUEST_CODE = 1;
     SharedPreferences sharedPreferences;
@@ -124,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
             Event event = (Event) data.getSerializableExtra("event");
             String eventToast = String.format("Event: %s, Date: %s, Time: %s, Coefficient: %d, Type: %s",
                     event.getTitle(), event.getDate(), event.getTime(), event.getCoefficient(), event.getType());
-            Toast.makeText(this, eventToast, Toast.LENGTH_LONG).show();
-
-            String json = this.gson.toJson(event);
+            //Toast.makeText(this, eventToast, Toast.LENGTH_LONG).show();
 
             events.add(event);
+
+            String json = this.gson.toJson(event);
             String newEventsJson = gson.toJson(events);
             editor.putString("eventsList", newEventsJson);
             editor.apply();
@@ -136,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
             dailyFragment.updateEvents(events);
             Log.v("events",events.toString());
         }
+    }
 
+    void saveEventsToSharedPreferences(List<Event> e) {
+        this.events=e;
+        String json = gson.toJson(events);
+        editor.putString("eventsList", json);
+        editor.apply();
+
+        Log.v("events",events.toString());
     }
 }

@@ -1,5 +1,10 @@
 package com.example.projet2;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +25,7 @@ import java.util.List;
 public class DailyFragment extends Fragment {
     private ListView eventsListView;
     private EventAdapter eventAdapter;
+    private static final int EDIT_EVENT_REQUEST_CODE = 2;
 
     public DailyFragment() {
         // Required empty public constructor
@@ -38,7 +44,67 @@ public class DailyFragment extends Fragment {
         eventAdapter = new EventAdapter(getContext(), events);
         eventsListView.setAdapter(eventAdapter);
 
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = eventAdapter.getItem(position);
+                Intent intent = new Intent(getContext(), EditEventActivity.class);
+                intent.putExtra("event", event);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE);
+            }
+        });
+
+        eventsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = eventAdapter.getItem(position);
+                showDeleteConfirmationDialog(event, position);
+                return true;
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_EVENT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int position = data.getIntExtra("position", -1);
+            Event editedEvent = (Event) data.getSerializableExtra("event");
+
+            if (position >= 0 && editedEvent != null) {
+                eventAdapter.events.set(position, editedEvent);
+                eventAdapter.notifyDataSetChanged();
+                ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventAdapter.events);
+            }
+        }
+    }
+
+    private void showDeleteConfirmationDialog(final Event event, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Delete Event")
+                .setMessage("Do you want to delete this event?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        eventAdapter.events.remove(position);
+                        eventAdapter.notifyDataSetChanged();
+                        ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventAdapter.events);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing, just close the dialog
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setupSortSpinner(Spinner sortSpinner) {
