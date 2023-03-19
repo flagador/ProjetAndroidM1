@@ -76,7 +76,10 @@ public class EventAdapter extends BaseAdapter {
 
         return convertView;
     }
-
+    public void updateEvents(List<Event> newEvents) {
+        this.events = newEvents;
+        notifyDataSetChanged();
+    }
     private static class ViewHolder {
         TextView dateTextView;
         TextView timeTextView;

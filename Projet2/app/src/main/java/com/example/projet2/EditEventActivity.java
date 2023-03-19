@@ -1,16 +1,22 @@
 package com.example.projet2;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class EditEventActivity extends AppCompatActivity {
     // ...
@@ -28,6 +34,8 @@ public class EditEventActivity extends AppCompatActivity {
         coeffEditText = findViewById(R.id.coeffEditText);
         typeSpinner = findViewById(R.id.typeSpinner);
 
+
+        setupDateAndTimePickers();
         String[] types = new String[]{"Examen", "Oral", "TP Noté"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,6 +61,49 @@ public class EditEventActivity extends AppCompatActivity {
         });
 
     }
+
+    private void setupDateAndTimePickers() {
+        final Calendar calendar = Calendar.getInstance();
+
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EditEventActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                month++; // Months are zero-based
+                                String dateString = String.format("%02d", dayOfMonth) + "-" + String.format("%02d", month) + "-" + year;
+                                dateEditText.setText(dateString);
+                            }
+                        }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
+        timeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(EditEventActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                String timeString = String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute);
+                                timeEditText.setText(timeString);
+                            }
+                        }, hour, minute, true);
+                timePickerDialog.show();
+            }
+        });
+    }
+
     private void saveEvent() {
         String title = titleEditText.getText().toString();
         String date = dateEditText.getText().toString();

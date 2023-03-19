@@ -72,11 +72,15 @@ public class MainActivity extends AppCompatActivity  {
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                //UPDATE LES FRAGMENTS AU LANCEMENT
+                //UPDATE La liste d'event
                 dailyFragment.updateEvents(events);
 
             }
         });
+    }
+
+    public List<Event> getEvents(){
+        return this.events;
     }
 
     private void setupViewPager(ViewPager viewPager) {

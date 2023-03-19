@@ -89,7 +89,7 @@ public class AddEventActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 month++; // Months are zero-based
-                                String dateString = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", dayOfMonth);
+                                String dateString = String.format("%02d", dayOfMonth) + "-" + String.format("%02d", month) + "-" + year;
                                 dateEditText.setText(dateString);
                             }
                         }, year, month, day);
