@@ -73,8 +73,9 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onPageSelected(int position) {
                 //UPDATE La liste d'event
-                dailyFragment.updateEvents(events);
-
+                if(dailyFragment.isVisible()){
+                    dailyFragment.updateEvents(events);
+                }
             }
         });
     }

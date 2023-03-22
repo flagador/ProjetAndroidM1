@@ -70,7 +70,6 @@ public class DailyFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == EDIT_EVENT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             int position = data.getIntExtra("position", -1);
             Event editedEvent = (Event) data.getSerializableExtra("event");
