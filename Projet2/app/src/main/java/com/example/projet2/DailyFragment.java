@@ -139,14 +139,8 @@ public class DailyFragment extends Fragment {
 
     // Call this method to update the events list with the actual data
     public void updateEvents(List<Event> events) {
-        if (eventAdapter != null) {
-            eventAdapter.events.clear();
-            eventAdapter.events.addAll(events);
-            eventAdapter.notifyDataSetChanged();
-        } else {
-            eventAdapter = new EventAdapter(getContext(), events);
-            eventsListView.setAdapter(eventAdapter);
-            setupSortSpinner(requireView().findViewById(R.id.sortSpinner));
-        }
+        eventAdapter = new EventAdapter(getContext(), events);
+        eventsListView.setAdapter(eventAdapter);
+        setupSortSpinner(requireView().findViewById(R.id.sortSpinner));
     }
 }
