@@ -1,7 +1,10 @@
 package com.example.projet2;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,6 +37,7 @@ public class MonthlyFragment extends Fragment {
     private SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy", Locale.getDefault());
     private EventAdapter eventsAdapter;
+    private static final int EDIT_EVENT_REQUEST_CODE = 2;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,6 +74,17 @@ public class MonthlyFragment extends Fragment {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 monthYearTextView.setText(monthYearFormat.format(firstDayOfNewMonth));
+            }
+        });
+
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = eventsAdapter.getItem(position);
+                Intent intent = new Intent(getContext(), EditEventActivity.class);
+                intent.putExtra("event", event);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE);
             }
         });
 
@@ -131,5 +146,22 @@ public class MonthlyFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_EVENT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int position = data.getIntExtra("position", -1);
+            Event editedEvent = (Event) data.getSerializableExtra("event");
+
+            if (position >= 0 && editedEvent != null) {
+                List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
+                eventsUpdated.set(eventsUpdated.indexOf(eventsAdapter.events.get(position)), editedEvent);
+                eventsAdapter.events.set(position, editedEvent);
+                eventsAdapter.notifyDataSetChanged();
+                ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+            }
+        }
     }
 }

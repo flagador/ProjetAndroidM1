@@ -138,7 +138,9 @@ public class MainActivity extends AppCompatActivity  {
             editor.putString("eventsList", newEventsJson);
             editor.apply();
             //UPDATE LES EVENTS DANS LES FRAGMENTS
-            dailyFragment.updateEvents(events);
+            if(dailyFragment.isVisible()){
+                dailyFragment.updateEvents(events);
+            }
             Log.v("events",events.toString());
         }
     }
