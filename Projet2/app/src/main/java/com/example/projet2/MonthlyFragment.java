@@ -1,10 +1,13 @@
 package com.example.projet2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +33,7 @@ public class MonthlyFragment extends Fragment {
     private List<com.example.projet2.Event> events;
     private SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy", Locale.getDefault());
+    private EventAdapter eventsAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,7 +47,7 @@ public class MonthlyFragment extends Fragment {
         ListView eventsListView = view.findViewById(R.id.eventsListView);
 
         // Set up the RecyclerView
-        EventAdapter eventsAdapter = new EventAdapter(getContext(), new ArrayList<>());
+        eventsAdapter = new EventAdapter(getContext(), new ArrayList<>());
         eventsListView.setAdapter(eventsAdapter);
 
         // Set the initial month and year TextView value
@@ -66,6 +70,15 @@ public class MonthlyFragment extends Fragment {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 monthYearTextView.setText(monthYearFormat.format(firstDayOfNewMonth));
+            }
+        });
+
+        eventsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = eventsAdapter.getItem(position);
+                showDeleteConfirmationDialog(event, position);
+                return true;
             }
         });
 
@@ -92,5 +105,31 @@ public class MonthlyFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void showDeleteConfirmationDialog(final Event event, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Delete Event")
+                .setMessage("Do you want to delete this event?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Event deletedEvent = eventsAdapter.events.remove(position);
+                        List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
+                        eventsUpdated.remove(deletedEvent);
+                        eventsAdapter.notifyDataSetChanged();
+                        ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing, just close the dialog
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
