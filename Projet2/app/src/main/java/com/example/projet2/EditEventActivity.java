@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,12 +17,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class EditEventActivity extends AppCompatActivity {
     // ...
-    private EditText titleEditText, dateEditText, timeEditText, coeffEditText;
-    private Spinner typeSpinner;
+    private EditText titleEditText, dateEditText, timeEditText, coeffEditText, subjectNameEditText;
+    private Spinner typeSpinner,subjectSpinner;
+    private Button addSubjectButton;
+    private List<Subject> subjects;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,10 @@ public class EditEventActivity extends AppCompatActivity {
         timeEditText = findViewById(R.id.timeEditText);
         coeffEditText = findViewById(R.id.coeffEditText);
         typeSpinner = findViewById(R.id.typeSpinner);
+        subjectSpinner = findViewById(R.id.subjectSpinner);
+
+        subjects = loadSubjects();
+        setupSubjectSpinner();
 
 
         setupDateAndTimePickers();
@@ -110,14 +123,33 @@ public class EditEventActivity extends AppCompatActivity {
         String time = timeEditText.getText().toString();
         int coefficient = Integer.parseInt(coeffEditText.getText().toString());
         String type = typeSpinner.getSelectedItem().toString();
+        Subject selectedSubject = (Subject) subjectSpinner.getSelectedItem();
 
-        Event e = new Event(title, date, time, coefficient, type);
+        Event e = new Event(title, date, time, coefficient, type, selectedSubject);
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("event", e);
         resultIntent.putExtra("position", getIntent().getIntExtra("position", -1));
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private void setupSubjectSpinner() {
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(adapter);
+    }
+
+    private List<Subject> loadSubjects() {
+        SharedPreferences sharedPreferences = getSharedPreferences("subjects", MODE_PRIVATE);
+        String json = sharedPreferences.getString("subjectList", null);
+        Type type = new TypeToken<ArrayList<Subject>>() {}.getType();
+        List<Subject> subjectList = new Gson().fromJson(json, type);
+
+        if (subjectList == null) {
+            subjectList = new ArrayList<>();
+        }
+        return subjectList;
     }
 
 }

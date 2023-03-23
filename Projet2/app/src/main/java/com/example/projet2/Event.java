@@ -2,19 +2,22 @@ package com.example.projet2;
 
 import java.io.Serializable;
 
+
 public class Event implements Serializable {
     private String title;
     private String date;
     private String time;
     private int coefficient;
     private String type;
+    private Subject subject;
 
-    public Event(String title, String date, String time, int coefficient, String type) {
+    public Event(String title, String date, String time, int coefficient, String type, Subject subject) {
         this.title = title;
         this.date = date;
         this.time = time;
         this.coefficient = coefficient;
         this.type = type;
+        this.subject = subject;
     }
 
     public String getTitle() {
@@ -55,6 +58,13 @@ public class Event implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public String toString(){

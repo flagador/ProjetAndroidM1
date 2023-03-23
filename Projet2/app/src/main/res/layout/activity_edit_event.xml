@@ -38,16 +38,49 @@
             android:layout_height="wrap_content"
             android:hint="@string/event_coefficient"
             android:inputType="number" />
-
-        <Spinner
-            android:id="@+id/typeSpinner"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/typeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type "
+                android:textSize="18sp" />
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/subjectTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subject "
+                android:textSize="18sp" />
+            <Spinner
+                android:id="@+id/subjectSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/saveEventButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save_event" />
+
     </LinearLayout>
 </ScrollView>

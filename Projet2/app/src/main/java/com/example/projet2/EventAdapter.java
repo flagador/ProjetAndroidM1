@@ -60,6 +60,7 @@ public class EventAdapter extends BaseAdapter {
             holder.dateTextView = convertView.findViewById(R.id.dateTextView);
             holder.timeTextView = convertView.findViewById(R.id.timeTextView);
             holder.titleTextView = convertView.findViewById(R.id.titleTextView);
+            holder.subjectTextView = convertView.findViewById(R.id.subjectTextView);
             holder.coefficientTextView = convertView.findViewById(R.id.coefficientTextView);
             holder.typeTextView = convertView.findViewById(R.id.typeTextView);
             convertView.setTag(holder);
@@ -71,6 +72,7 @@ public class EventAdapter extends BaseAdapter {
         holder.dateTextView.setText(event.getDate());
         holder.timeTextView.setText("Time: " + event.getTime());
         holder.titleTextView.setText(event.getTitle());
+        holder.subjectTextView.setText(event.getSubject().getName());
         holder.coefficientTextView.setText("  Coefficient: " + event.getCoefficient());
         holder.typeTextView.setText("  Type: " + event.getType());
 
@@ -81,6 +83,7 @@ public class EventAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     private static class ViewHolder {
+        TextView subjectTextView;
         TextView dateTextView;
         TextView timeTextView;
         TextView titleTextView;

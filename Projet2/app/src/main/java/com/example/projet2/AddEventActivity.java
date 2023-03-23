@@ -28,8 +28,10 @@ import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    private EditText titleEditText, dateEditText, timeEditText, coeffEditText;
-    private Spinner typeSpinner;
+    private EditText titleEditText, dateEditText, timeEditText, coeffEditText, subjectNameEditText;
+    private Spinner typeSpinner,subjectSpinner;
+    private Button addSubjectButton;
+    private List<Subject> subjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,13 @@ public class AddEventActivity extends AppCompatActivity {
         timeEditText = findViewById(R.id.timeEditText);
         coeffEditText = findViewById(R.id.coeffEditText);
         typeSpinner = findViewById(R.id.typeSpinner);
+        subjectNameEditText = findViewById(R.id.subjectNameEditText);
+        addSubjectButton = findViewById(R.id.addSubjectButton);
+        subjectSpinner = findViewById(R.id.subjectSpinner);
+
+        subjects = loadSubjects();
+        setupSubjectSpinner();
+        setupAddSubjectButton();
 
         setupDateAndTimePickers();
         setupTypeSpinner();
@@ -52,6 +61,7 @@ public class AddEventActivity extends AppCompatActivity {
                 String title = titleEditText.getText().toString();
                 String dateString = dateEditText.getText().toString();
                 String timeString = timeEditText.getText().toString();
+                Subject selectedSubject = (Subject) subjectSpinner.getSelectedItem();
                 int coefficient = 0;
                 if(!coeffEditText.getText().toString().equals("")) {
                     coefficient = Integer.parseInt(coeffEditText.getText().toString());
@@ -61,7 +71,7 @@ public class AddEventActivity extends AppCompatActivity {
                 if(title.equals("") || dateString.equals("") || timeString.equals("") || coefficient==0){
                     Toast.makeText(getApplicationContext(),"Missing value :(", Toast.LENGTH_LONG).show();
                 } else {
-                    Event event = new Event(title, dateString, timeString, coefficient, type);
+                    Event event = new Event(title, dateString, timeString, coefficient, type, selectedSubject);
                     //saveEvent(event);
 
                     // Pass the event back to MainActivity
@@ -121,5 +131,47 @@ public class AddEventActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter);
+    }
+
+    private void setupSubjectSpinner() {
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(adapter);
+    }
+
+    private void setupAddSubjectButton() {
+        addSubjectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String subjectName = subjectNameEditText.getText().toString();
+                if (!subjectName.isEmpty()) {
+                    Subject newSubject = new Subject(subjectName);
+                    subjects.add(newSubject);
+                    saveSubjects(subjects);
+                    subjectNameEditText.setText("");
+                    setupSubjectSpinner();
+                }
+            }
+        });
+    }
+
+    private List<Subject> loadSubjects() {
+        SharedPreferences sharedPreferences = getSharedPreferences("subjects", MODE_PRIVATE);
+        String json = sharedPreferences.getString("subjectList", null);
+        Type type = new TypeToken<ArrayList<Subject>>() {}.getType();
+        List<Subject> subjectList = new Gson().fromJson(json, type);
+
+        if (subjectList == null) {
+            subjectList = new ArrayList<>();
+        }
+        return subjectList;
+    }
+
+    private void saveSubjects(List<Subject> subjectList) {
+        SharedPreferences sharedPreferences = getSharedPreferences("subjects", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String json = new Gson().toJson(subjectList);
+        editor.putString("subjectList", json);
+        editor.apply();
     }
 }
