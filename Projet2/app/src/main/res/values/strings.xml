@@ -10,5 +10,6 @@
         <item>Sort by date</item>
         <item>Sort by coefficient</item>
         <item>Sort by type</item>
+        <item>Sort by subject</item>
     </string-array>
 </resources>

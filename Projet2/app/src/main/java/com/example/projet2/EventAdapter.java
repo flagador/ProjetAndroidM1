@@ -50,6 +50,16 @@ public class EventAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void sortBySubject() {
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event event1, Event event2) {
+                return event1.getSubject().getName().compareToIgnoreCase(event2.getSubject().getName());
+            }
+        });
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

@@ -127,6 +127,9 @@ public class DailyFragment extends Fragment {
                         case 2: // Sort by type
                             eventAdapter.sortByType();
                             break;
+                        case 3: // Sort by Subject
+                            eventAdapter.sortBySubject();
+                            break;
                     }
                 }
             }
