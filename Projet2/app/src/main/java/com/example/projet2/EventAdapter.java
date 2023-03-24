@@ -1,11 +1,14 @@
 package com.example.projet2;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +17,7 @@ import java.util.List;
 public class EventAdapter extends BaseAdapter {
     List<Event> events;
     LayoutInflater inflater;
+    
 
     public EventAdapter(Context context, List<Event> events) {
         this.events = events;
@@ -79,6 +83,9 @@ public class EventAdapter extends BaseAdapter {
         }
 
         Event event = getItem(position);
+        MaterialCardView cardView = convertView.findViewById(R.id.card_view);
+        int color = getColorFromSubject(event.getSubject());
+        cardView.setCardBackgroundColor(color);
         holder.dateTextView.setText(event.getDate());
         holder.timeTextView.setText("Time: " + event.getTime());
         holder.titleTextView.setText(event.getTitle());
@@ -91,6 +98,21 @@ public class EventAdapter extends BaseAdapter {
     public void updateEvents(List<Event> newEvents) {
         this.events = newEvents;
         notifyDataSetChanged();
+    }
+
+    private int getColorFromSubject(Subject subject) {
+        int hash = subject.getName().hashCode();
+        int red = (hash & 0xFF0000) >> 16;
+        int green = (hash & 0x00FF00) >> 8;
+        int blue = hash & 0x0000FF;
+
+        // You can adjust the brightness of the color if needed (e.g., to make it lighter).
+        float[] hsv = new float[3];
+        Color.RGBToHSV(red, green, blue, hsv);
+        hsv[1] = Math.min(hsv[1], 0.8f); // Limit saturation
+        hsv[2] = Math.max(hsv[2], 1.0f); // Limit brightness
+
+        return Color.HSVToColor(hsv);
     }
     private static class ViewHolder {
         TextView subjectTextView;
