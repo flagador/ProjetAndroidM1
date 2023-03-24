@@ -124,14 +124,17 @@ public class EditEventActivity extends AppCompatActivity {
         int coefficient = Integer.parseInt(coeffEditText.getText().toString());
         String type = typeSpinner.getSelectedItem().toString();
         Subject selectedSubject = (Subject) subjectSpinner.getSelectedItem();
+        if(title.equals("") || date.equals("") || time.equals("") || coefficient==0 || selectedSubject==null){
+            Toast.makeText(getApplicationContext(),"Missing value :(", Toast.LENGTH_LONG).show();
+        } else {
+            Event e = new Event(title, date, time, coefficient, type, selectedSubject);
 
-        Event e = new Event(title, date, time, coefficient, type, selectedSubject);
-
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("event", e);
-        resultIntent.putExtra("position", getIntent().getIntExtra("position", -1));
-        setResult(RESULT_OK, resultIntent);
-        finish();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("event", e);
+            resultIntent.putExtra("position", getIntent().getIntExtra("position", -1));
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }
     }
 
     private void setupSubjectSpinner() {

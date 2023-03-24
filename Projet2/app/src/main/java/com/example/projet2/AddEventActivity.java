@@ -68,7 +68,7 @@ public class AddEventActivity extends AppCompatActivity {
                 }
                 String type = typeSpinner.getSelectedItem().toString();
 
-                if(title.equals("") || dateString.equals("") || timeString.equals("") || coefficient==0){
+                if(title.equals("") || dateString.equals("") || timeString.equals("") || coefficient==0 || selectedSubject==null){
                     Toast.makeText(getApplicationContext(),"Missing value :(", Toast.LENGTH_LONG).show();
                 } else {
                     Event event = new Event(title, dateString, timeString, coefficient, type, selectedSubject);
