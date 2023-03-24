@@ -11,6 +11,16 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/titleAddEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add an Event"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
         <EditText
             android:id="@+id/titleEditText"
             android:layout_width="match_parent"
@@ -82,13 +92,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_event" />
+
+        <TextView
+            android:id="@+id/titleAddSubject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create a Subject"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
         <EditText
             android:id="@+id/subjectNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Subject name"
             android:inputType="text"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"/>
 
         <Button

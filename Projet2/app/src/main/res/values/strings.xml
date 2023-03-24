@@ -12,4 +12,11 @@
         <item>Sort by type</item>
         <item>Sort by subject</item>
     </string-array>
+    <string-array name="types">
+        <item>Examen</item>
+        <item>Oral</item>
+        <item>TP Noté</item>
+        <item>Test</item>
+        <item>Autre</item>
+    </string-array>
 </resources>

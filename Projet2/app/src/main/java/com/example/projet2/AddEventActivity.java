@@ -127,8 +127,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void setupTypeSpinner() {
-        String[] types = new String[]{"Examen", "Oral", "TP Noté"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter);
     }

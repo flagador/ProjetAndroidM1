@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,14 +46,15 @@ public class EditEventActivity extends AppCompatActivity {
         subjectSpinner = findViewById(R.id.subjectSpinner);
 
         subjects = loadSubjects();
-        setupSubjectSpinner();
-
-
         setupDateAndTimePickers();
-        String[] types = new String[]{"Examen", "Oral", "TP Noté"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this, R.array.types, android.R.layout.simple_spinner_item);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(typeAdapter);
+
+        ArrayAdapter<Subject> subjectAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
 
         Intent intent = getIntent();
         Event event = (Event) intent.getSerializableExtra("event");
@@ -62,7 +64,8 @@ public class EditEventActivity extends AppCompatActivity {
             dateEditText.setText(event.getDate());
             timeEditText.setText(event.getTime());
             coeffEditText.setText(String.valueOf(event.getCoefficient()));
-            typeSpinner.setSelection(adapter.getPosition(event.getType()));
+            typeSpinner.setSelection(typeAdapter.getPosition(event.getType()));
+            subjectSpinner.setSelection(subjectAdapter.getPosition(event.getSubject()));
         }
 
         Button saveEventButton = findViewById(R.id.saveEventButton);
@@ -135,12 +138,6 @@ public class EditEventActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultIntent);
             finish();
         }
-    }
-
-    private void setupSubjectSpinner() {
-        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subjectSpinner.setAdapter(adapter);
     }
 
     private List<Subject> loadSubjects() {
