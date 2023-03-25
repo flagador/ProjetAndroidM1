@@ -18,80 +18,101 @@
             android:text="Add an Event"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/titleEditText"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/event_title"
-            android:inputType="text" />
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/dateEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/event_date"
-            android:focusable="false" />
-
-        <EditText
-            android:id="@+id/timeEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/event_time"
-            android:focusable="false" />
-
-        <EditText
-            android:id="@+id/coeffEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/event_coefficient"
-            android:inputType="number" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp">
-
-            <TextView
-                android:id="@+id/typeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Type "
-                android:textSize="18sp" />
-            <Spinner
-                android:id="@+id/typeSpinner"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:hint="@string/event_title"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp">
+            app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/subjectTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Subject "
-                android:textSize="18sp" />
-            <Spinner
-                android:id="@+id/subjectSpinner"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dateEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:hint="@string/event_date"
+                android:focusable="false" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/timeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_time"
+                android:focusable="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/coeffEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_coefficient"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/typeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type "
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/subjectTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subject "
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/subjectSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addEventButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_event" />
+            android:text="@string/add_event"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cornerRadius="8dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
         <TextView
             android:id="@+id/titleAddSubject"
@@ -100,21 +121,31 @@
             android:text="Create a Subject"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/subjectNameEditText"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Subject name"
-            android:inputType="text"
-            android:layout_marginBottom="16dp"/>
+            app:errorEnabled="true">
 
-        <Button
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/subjectNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Subject name"
+                android:inputType="text"
+                android:layout_marginBottom="8dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addSubjectButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create subject" />
+            android:text="Create subject"
+            app:cornerRadius="8dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
     </LinearLayout>
 </ScrollView>
