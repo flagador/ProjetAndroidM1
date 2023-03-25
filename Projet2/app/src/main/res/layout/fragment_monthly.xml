@@ -27,7 +27,7 @@
         app:compactCalendarEventIndicatorStyle="small_indicator"
         app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
         app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
-        app:compactCalendarMultiEventIndicatorColor="#fff"/>
+        app:compactCalendarMultiEventIndicatorColor="#000"/>
 
     <ListView
         android:id="@+id/eventsListView"

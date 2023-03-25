@@ -48,6 +48,7 @@ public class MonthlyFragment extends Fragment {
         events = ((MainActivity) getActivity()).getEvents();
 
         calendarView = view.findViewById(R.id.calendarView);
+        calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
         TextView monthYearTextView = view.findViewById(R.id.monthYearTextView);
         ListView eventsListView = view.findViewById(R.id.eventsListView);
 
@@ -112,7 +113,6 @@ public class MonthlyFragment extends Fragment {
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.getDefault());
         outputDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
         for (com.example.projet2.Event event : events) {
             String dateStr = event.getDate();
             try {
