@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,10 +82,15 @@ public class MonthlyFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = eventsAdapter.getItem(position);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        view,
+                        "transition_event"
+                );
                 Intent intent = new Intent(getContext(), EditEventActivity.class);
                 intent.putExtra("event", event);
                 intent.putExtra("position", position);
-                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE);
+                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE, options.toBundle());
             }
         });
 
@@ -102,7 +108,7 @@ public class MonthlyFragment extends Fragment {
         return view;
     }
 
-    private void displayEventIndicators() {
+    void displayEventIndicators() {
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.getDefault());
         outputDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -114,7 +120,7 @@ public class MonthlyFragment extends Fragment {
                 long eventTimeInMillis = eventDate.getTime();
 
                 com.github.sundeepk.compactcalendarview.domain.Event compactCalendarEvent =
-                        new com.github.sundeepk.compactcalendarview.domain.Event(Color.BLUE, eventTimeInMillis);
+                        new com.github.sundeepk.compactcalendarview.domain.Event(eventsAdapter.getColorFromSubject(event.getSubject()), eventTimeInMillis);
                 calendarView.addEvent(compactCalendarEvent);
             } catch (ParseException e) {
                 e.printStackTrace();

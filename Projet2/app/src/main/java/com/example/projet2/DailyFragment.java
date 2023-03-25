@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -49,10 +50,15 @@ public class DailyFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = eventAdapter.getItem(position);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        view,
+                        "transition_event"
+                );
                 Intent intent = new Intent(getContext(), EditEventActivity.class);
                 intent.putExtra("event", event);
                 intent.putExtra("position", position);
-                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE);
+                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE,options.toBundle());
             }
         });
 

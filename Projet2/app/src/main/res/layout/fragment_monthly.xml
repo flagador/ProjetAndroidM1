@@ -21,8 +21,10 @@
         android:paddingLeft="10dp"
         android:layout_height="250dp"
         app:compactCalendarTargetHeight="250dp"
-        app:compactCalendarTextSize="12sp"
+        app:compactCalendarTextSize="20sp"
         app:compactCalendarTextColor="#000"
+        app:compactCalendarCurrentDayIndicatorStyle="fill_large_indicator"
+        app:compactCalendarEventIndicatorStyle="small_indicator"
         app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
         app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
         app:compactCalendarMultiEventIndicatorColor="#fff"/>
@@ -30,6 +32,7 @@
     <ListView
         android:id="@+id/eventsListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:transitionName="transition_event"/>
 
 </LinearLayout>

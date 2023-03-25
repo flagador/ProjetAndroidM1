@@ -100,7 +100,7 @@ public class EventAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    private int getColorFromSubject(Subject subject) {
+    int getColorFromSubject(Subject subject) {
         int hash = subject.getName().hashCode();
         int red = (hash & 0xFF0000) >> 16;
         int green = (hash & 0x00FF00) >> 8;

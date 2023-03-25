@@ -2,6 +2,7 @@ package com.example.projet2;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -64,7 +65,12 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 Intent addEventIntent = new Intent(MainActivity.this, AddEventActivity.class);
-                startActivityForResult(addEventIntent, ADD_EVENT_REQUEST_CODE);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        MainActivity.this,
+                        view,
+                        "fab_transition"
+                );
+                startActivityForResult(addEventIntent, ADD_EVENT_REQUEST_CODE, options.toBundle());
             }
         });
 
@@ -142,6 +148,7 @@ public class MainActivity extends AppCompatActivity  {
                 dailyFragment.updateEvents(events);
             }
             Log.v("events",events.toString());
+            monthlyFragment.displayEventIndicators();
         }
     }
 
