@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:text="Date"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
 
 
@@ -33,7 +34,8 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="Subject"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/titleTextView"
@@ -41,7 +43,8 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="Title"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
 
         <LinearLayout
@@ -54,19 +57,22 @@
                 android:id="@+id/timeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time: " />
+                android:text="Time: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/coefficientTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coefficient: " />
+                android:text="Coefficient: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/typeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type" />
+                android:text="Type"
+                android:textColor="@color/black"/>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
