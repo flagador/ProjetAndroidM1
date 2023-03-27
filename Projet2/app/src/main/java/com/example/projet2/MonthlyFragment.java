@@ -55,7 +55,6 @@ public class MonthlyFragment extends Fragment {
         // Set up the RecyclerView
         eventsAdapter = new EventAdapter(getContext(), new ArrayList<>());
         eventsListView.setAdapter(eventsAdapter);
-
         // Set the initial month and year TextView value
         monthYearTextView.setText(monthYearFormat.format(calendarView.getFirstDayOfCurrentMonth()));
         calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
