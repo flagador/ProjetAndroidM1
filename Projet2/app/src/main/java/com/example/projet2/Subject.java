@@ -1,5 +1,6 @@
 package com.example.projet2;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Subject implements Serializable {
     private String name;
@@ -16,6 +17,11 @@ public class Subject implements Serializable {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        Subject subject = (Subject) obj;
+        return Objects.equals(this.name,subject.name);
+    }
     @Override
     public String toString() {
         return name;
