@@ -112,6 +112,7 @@ public class MonthlyFragment extends Fragment {
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.getDefault());
         outputDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendarView.removeAllEvents();
         for (com.example.projet2.Event event : events) {
             String dateStr = event.getDate();
             try {
