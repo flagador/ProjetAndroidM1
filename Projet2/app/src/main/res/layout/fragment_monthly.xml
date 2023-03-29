@@ -51,5 +51,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:transitionName="transition_event"/>
+    <TextView
+        android:id="@+id/upcomingEventsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upcoming events"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/upcomingEventsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -25,7 +25,10 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +40,11 @@ public class MonthlyFragment extends Fragment {
     private List<com.example.projet2.Event> events;
     private SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy", Locale.getDefault());
-    EventAdapter eventsAdapter;
+    private TextView upcomingEventsTitle;
+    private ListView upcomingEventsListView;
+    EventAdapter eventsAdapter, upcomingEventAdapter;
     private static final int EDIT_EVENT_REQUEST_CODE = 2;
+    private static final int EDIT_EVENT_REQUEST_CODE_UPCOMING = 3;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,24 +58,22 @@ public class MonthlyFragment extends Fragment {
         TextView monthYearTextView = view.findViewById(R.id.monthYearTextView);
         ListView eventsListView = view.findViewById(R.id.eventsListView);
 
-        // Set up the RecyclerView
+        upcomingEventsTitle = view.findViewById(R.id.upcomingEventsTitle);
+        upcomingEventsListView = view.findViewById(R.id.upcomingEventsRecyclerView);
+        upcomingEventAdapter = new EventAdapter(getContext(), new ArrayList<>());
+        upcomingEventsListView.setAdapter(upcomingEventAdapter);
+
+        // Set up the ListView
         eventsAdapter = new EventAdapter(getContext(), new ArrayList<>());
         eventsListView.setAdapter(eventsAdapter);
+        setListOfEvents(new Date());
+
         // Set the initial month and year TextView value
         monthYearTextView.setText(monthYearFormat.format(calendarView.getFirstDayOfCurrentMonth()));
         calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date clickedDay) {
-                String selectedDate = dateFormat.format(clickedDay);
-                List<com.example.projet2.Event> selectedDayEvents = new ArrayList<>();
-
-                for (com.example.projet2.Event event : events) {
-                    if (event.getDate().equals(selectedDate)) {
-                        selectedDayEvents.add(event);
-                    }
-                }
-
-                eventsAdapter.updateEvents(selectedDayEvents);
+                setListOfEvents(clickedDay);
             }
 
             @Override
@@ -94,6 +98,22 @@ public class MonthlyFragment extends Fragment {
             }
         });
 
+        upcomingEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = upcomingEventAdapter.getItem(position);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        view,
+                        "transition_event"
+                );
+                Intent intent = new Intent(getContext(), EditEventActivity.class);
+                intent.putExtra("event", event);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE_UPCOMING, options.toBundle());
+            }
+        });
+
         eventsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,6 +126,51 @@ public class MonthlyFragment extends Fragment {
         displayEventIndicators();
 
         return view;
+    }
+
+    public void setListOfEvents(Date clickedDay){
+        String selectedDate = dateFormat.format(clickedDay);
+        List<com.example.projet2.Event> selectedDayEvents = new ArrayList<>();
+
+        for (com.example.projet2.Event event : events) {
+            if (event.getDate().equals(selectedDate)) {
+                selectedDayEvents.add(event);
+            }
+        }
+        eventsAdapter.updateEvents(selectedDayEvents);
+        if (selectedDayEvents.isEmpty()) {
+            List<Event> upcomingEvents = null;
+            try {
+                upcomingEvents = loadTwoUpcomingEvents(clickedDay);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if (upcomingEvents.size() > 0){
+                this.upcomingEventsTitle.setVisibility(View.VISIBLE);
+                upcomingEventsListView.setVisibility(View.VISIBLE);
+                upcomingEventAdapter.updateEvents(upcomingEvents);
+                upcomingEventAdapter.sortByDate();
+            } else {
+                upcomingEventsTitle.setVisibility(View.GONE);
+                upcomingEventsListView.setVisibility(View.GONE);
+            }
+        } else {
+            upcomingEventsTitle.setVisibility(View.GONE);
+            upcomingEventsListView.setVisibility(View.GONE);
+        }
+    }
+
+    private List<Event> loadTwoUpcomingEvents(Date date) throws ParseException {
+        List<Event> upcomingEvents = new ArrayList<>();
+        Date todayDate = null;
+        for (Event event : events) {
+            todayDate =new SimpleDateFormat("dd-MM-yyyy").parse(event.getDate());
+            // Check if the event is on or after the selected date
+            if (!todayDate.before(date) && upcomingEvents.size()<2) {
+                upcomingEvents.add(event);
+            }
+        }
+        return upcomingEvents;
     }
 
     void displayEventIndicators() {
@@ -166,6 +231,19 @@ public class MonthlyFragment extends Fragment {
                 eventsAdapter.events.set(position, editedEvent);
                 eventsAdapter.notifyDataSetChanged();
                 ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+                displayEventIndicators();
+            }
+        } else if (requestCode == EDIT_EVENT_REQUEST_CODE_UPCOMING && resultCode == RESULT_OK && data != null) {
+            int position = data.getIntExtra("position", -1);
+            Event editedEvent = (Event) data.getSerializableExtra("event");
+
+            if (position >= 0 && editedEvent != null) {
+                List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
+                eventsUpdated.set(eventsUpdated.indexOf(upcomingEventAdapter.events.get(position)), editedEvent);
+                upcomingEventAdapter.events.set(position, editedEvent);
+                upcomingEventAdapter.notifyDataSetChanged();
+                ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+                displayEventIndicators();
             }
         }
     }
