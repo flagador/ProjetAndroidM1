@@ -45,6 +45,7 @@ public class MonthlyFragment extends Fragment {
     EventAdapter eventsAdapter, upcomingEventAdapter;
     private static final int EDIT_EVENT_REQUEST_CODE = 2;
     private static final int EDIT_EVENT_REQUEST_CODE_UPCOMING = 3;
+    private Date currentlySelectedDay;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,12 +68,14 @@ public class MonthlyFragment extends Fragment {
         eventsAdapter = new EventAdapter(getContext(), new ArrayList<>());
         eventsListView.setAdapter(eventsAdapter);
         setListOfEvents(new Date());
+        currentlySelectedDay=new Date();
 
         // Set the initial month and year TextView value
         monthYearTextView.setText(monthYearFormat.format(calendarView.getFirstDayOfCurrentMonth()));
         calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date clickedDay) {
+                currentlySelectedDay=clickedDay;
                 setListOfEvents(clickedDay);
             }
 
@@ -203,6 +206,7 @@ public class MonthlyFragment extends Fragment {
                         List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
                         eventsUpdated.remove(deletedEvent);
                         eventsAdapter.notifyDataSetChanged();
+                        displayEventIndicators();
                         ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
                     }
                 })
@@ -229,8 +233,9 @@ public class MonthlyFragment extends Fragment {
                 List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
                 eventsUpdated.set(eventsUpdated.indexOf(eventsAdapter.events.get(position)), editedEvent);
                 eventsAdapter.events.set(position, editedEvent);
-                eventsAdapter.notifyDataSetChanged();
                 ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+                eventsAdapter.notifyDataSetChanged();
+                setListOfEvents(currentlySelectedDay);
                 displayEventIndicators();
             }
         } else if (requestCode == EDIT_EVENT_REQUEST_CODE_UPCOMING && resultCode == RESULT_OK && data != null) {
@@ -241,8 +246,9 @@ public class MonthlyFragment extends Fragment {
                 List<Event> eventsUpdated = ((MainActivity) getActivity()).getEvents();
                 eventsUpdated.set(eventsUpdated.indexOf(upcomingEventAdapter.events.get(position)), editedEvent);
                 upcomingEventAdapter.events.set(position, editedEvent);
-                upcomingEventAdapter.notifyDataSetChanged();
                 ((MainActivity) getActivity()).saveEventsToSharedPreferences(eventsUpdated);
+                upcomingEventAdapter.notifyDataSetChanged();
+                setListOfEvents(currentlySelectedDay);
                 displayEventIndicators();
             }
         }
