@@ -144,7 +144,7 @@ public class MonthlyFragment extends Fragment {
         if (selectedDayEvents.isEmpty()) {
             List<Event> upcomingEvents = null;
             try {
-                upcomingEvents = loadTwoUpcomingEvents(clickedDay);
+                upcomingEvents = loadTwoUpcomingEvents(new Date());
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
