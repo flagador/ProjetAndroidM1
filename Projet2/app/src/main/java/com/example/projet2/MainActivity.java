@@ -153,6 +153,27 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    List<Subject> loadSubjects() {
+        SharedPreferences sharedPreferences = getSharedPreferences("subjects", MODE_PRIVATE);
+        String json = sharedPreferences.getString("subjectList", null);
+        Type type = new TypeToken<ArrayList<Subject>>() {}.getType();
+        List<Subject> subjectList = new Gson().fromJson(json, type);
+
+        if (subjectList == null) {
+            subjectList = new ArrayList<>();
+        }
+        return subjectList;
+    }
+
+    public Subject findSubjectByName(String name) {
+        for (Subject subject : loadSubjects()) {
+            if (subject.getName().equalsIgnoreCase(name)) {
+                return subject;
+            }
+        }
+        return null;
+    }
+
     void saveEventsToSharedPreferences(List<Event> e) {
         this.events=e;
         String json = gson.toJson(events);

@@ -27,6 +27,7 @@ import java.util.List;
 public class DailyFragment extends Fragment {
     private ListView eventsListView;
     private EventAdapter eventAdapter;
+    private List<Event> allEvents;
     private static final int EDIT_EVENT_REQUEST_CODE = 2;
 
     public DailyFragment() {
@@ -45,6 +46,8 @@ public class DailyFragment extends Fragment {
         List<Event> events = new ArrayList<>();
         eventAdapter = new EventAdapter(getContext(), events);
         eventsListView.setAdapter(eventAdapter);
+        Spinner filterSpinner = view.findViewById(R.id.filterSpinner);
+        setupFilterSpinner(filterSpinner);
 
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -147,9 +150,46 @@ public class DailyFragment extends Fragment {
         });
     }
 
+    private void setupFilterSpinner(Spinner filterSpinner) {
+        List<String> filterOptions = new ArrayList<>();
+        List<Subject> subjects = ((MainActivity) getActivity()).loadSubjects();
+        filterOptions.add("All");
+        for (Subject subject : subjects) {
+            filterOptions.add(subject.getName());
+        }
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, filterOptions);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(spinnerAdapter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (eventAdapter != null) {
+                    String selectedOption = filterOptions.get(position);
+                    if (selectedOption.equals("All")) {
+                        eventAdapter.events = ((MainActivity) getActivity()).events;
+                        eventAdapter.filterEvents(null, null);
+                    } else {
+                        eventAdapter.events = ((MainActivity) getActivity()).events;
+                        Subject subject = ((MainActivity) getActivity()).findSubjectByName(selectedOption);
+                        eventAdapter.filterEvents(subject, null);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+    }
+
     // Call this method to update the events list with the actual data
     public void updateEvents(List<Event> events) {
-        eventAdapter = new EventAdapter(getContext(), events);
+        allEvents = events;
+        eventAdapter = new EventAdapter(getContext(), new ArrayList<>(allEvents));
         eventsListView.setAdapter(eventAdapter);
         setupSortSpinner(requireView().findViewById(R.id.sortSpinner));
     }

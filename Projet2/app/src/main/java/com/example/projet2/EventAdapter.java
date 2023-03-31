@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -113,6 +114,21 @@ public class EventAdapter extends BaseAdapter {
         hsv[2] = Math.max(hsv[2], 1.0f); // Limit brightness
 
         return Color.HSVToColor(hsv);
+    }
+
+    public void filterEvents(Subject subject, String type) {
+        List<Event> filteredEvents = new ArrayList<>();
+
+        for (Event event : events) {
+            boolean matchSubject = (subject == null || event.getSubject().getName().equalsIgnoreCase(subject.getName()));
+            boolean matchType = (type == null || event.getType().equalsIgnoreCase(type));
+
+            if (matchSubject && matchType) {
+                filteredEvents.add(event);
+            }
+        }
+
+        updateEvents(filteredEvents);
     }
     private static class ViewHolder {
         TextView subjectTextView;
