@@ -45,7 +45,7 @@ public class MonthlyFragment extends Fragment {
     EventAdapter eventsAdapter, upcomingEventAdapter;
     private static final int EDIT_EVENT_REQUEST_CODE = 2;
     private static final int EDIT_EVENT_REQUEST_CODE_UPCOMING = 3;
-    private Date currentlySelectedDay;
+    Date currentlySelectedDay;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity  {
             }
             Log.v("events",events.toString());
             monthlyFragment.displayEventIndicators();
+            monthlyFragment.setListOfEvents(monthlyFragment.currentlySelectedDay);
             monthlyFragment.eventsAdapter.notifyDataSetChanged();
         }
     }
