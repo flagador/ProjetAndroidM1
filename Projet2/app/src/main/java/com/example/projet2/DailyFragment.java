@@ -29,6 +29,7 @@ public class DailyFragment extends Fragment {
     private EventAdapter eventAdapter;
     private List<Event> allEvents;
     private static final int EDIT_EVENT_REQUEST_CODE = 2;
+    Spinner filterSpinner, sortSpinner;
 
     public DailyFragment() {
         // Required empty public constructor
@@ -41,12 +42,12 @@ public class DailyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_daily, container, false);
         eventsListView = view.findViewById(R.id.eventsListView);
-        Spinner sortSpinner = view.findViewById(R.id.sortSpinner);
+        sortSpinner = view.findViewById(R.id.sortSpinner);
         setupSortSpinner(sortSpinner);
         List<Event> events = new ArrayList<>();
         eventAdapter = new EventAdapter(getContext(), events);
         eventsListView.setAdapter(eventAdapter);
-        Spinner filterSpinner = view.findViewById(R.id.filterSpinner);
+        filterSpinner = view.findViewById(R.id.filterSpinner);
         setupFilterSpinner(filterSpinner);
 
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,7 +151,7 @@ public class DailyFragment extends Fragment {
         });
     }
 
-    private void setupFilterSpinner(Spinner filterSpinner) {
+    void setupFilterSpinner(Spinner filterSpinner) {
         List<String> filterOptions = new ArrayList<>();
         List<Subject> subjects = ((MainActivity) getActivity()).loadSubjects();
         filterOptions.add("All");
